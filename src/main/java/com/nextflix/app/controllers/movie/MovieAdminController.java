@@ -42,7 +42,7 @@ public class MovieAdminController {
 
         } catch (Exception e) {
 
-            return ResponseEntity.status(400).build();
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
@@ -52,7 +52,7 @@ public class MovieAdminController {
             movieAdminService.updateMovie(movieAdminDto);
             return ResponseEntity.ok().build();
         } catch(Exception e){
-            return ResponseEntity.status(400).build();
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 
@@ -63,7 +63,7 @@ public class MovieAdminController {
             return ResponseEntity.ok().build();
 
         } catch (Exception e){
-            return ResponseEntity.status(400).build();
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 }

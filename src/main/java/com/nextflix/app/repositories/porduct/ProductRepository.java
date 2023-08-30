@@ -7,5 +7,5 @@ import com.nextflix.app.entities.SubscriptionProduct;
 
 @Repository
 public interface ProductRepository extends JpaRepository<SubscriptionProduct, Long> {
-    SubscriptionProduct findTopByOrderByPriceDesc();
+    SubscriptionProduct findFirstByOrderById();
 }

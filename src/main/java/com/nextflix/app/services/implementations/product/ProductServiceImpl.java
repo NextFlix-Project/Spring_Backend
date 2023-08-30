@@ -19,7 +19,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public SubscriptionProductDto getProduct() {
-        return new SubscriptionProductDto(productRepository.findTopByOrderByPriceDesc());
+        return new SubscriptionProductDto(productRepository.findFirstByOrderById());
     }
 
     @Override

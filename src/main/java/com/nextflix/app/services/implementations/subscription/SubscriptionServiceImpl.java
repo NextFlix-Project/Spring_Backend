@@ -2,7 +2,6 @@ package com.nextflix.app.services.implementations.subscription;
 
 import java.sql.Timestamp;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,6 @@ import com.nextflix.app.services.interfaces.subscription.SubscriptionService;
 @Service
 public class SubscriptionServiceImpl implements SubscriptionService {
     @Autowired
-    @Lazy
     StripeServiceImpl stripeServiceImpl;
 
     @Autowired

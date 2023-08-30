@@ -37,7 +37,9 @@ public class User {
     private String lastName;
 
     @Column 
-    private String stripeCustomerId;
+    private String stripeCustomerId;    
+
+    @Column String stripePaymentMethodId;
     
     @Enumerated(EnumType.STRING)
     private UserRole role;

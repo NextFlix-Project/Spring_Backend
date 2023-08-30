@@ -4,15 +4,16 @@ import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nextflix.app.dtos.subscription.SubscriptionDto;
-import com.nextflix.app.dtos.user.UserDto;
+import com.nextflix.app.dtos.payment.ClientSecretDto;
+import com.nextflix.app.dtos.payment.PaymentIntentDto;
+import com.nextflix.app.dtos.payment.SubscriptionPaymentDto;
 import com.nextflix.app.services.interfaces.external.stripe.StripeService;
-import com.nextflix.app.services.interfaces.user.UserService;
 
 @RestController
 @RequestMapping("/api/v1/subscription")
@@ -21,16 +22,12 @@ public class SubscriptionController {
     @Autowired
     private StripeService stripeService;
 
-    @Autowired
-    private UserService userService;
-
     @PostMapping("/subscribe")
-    public ResponseEntity<?> subscribe(@RequestBody SubscriptionDto subscriptionDto, Principal principal) {
-        UserDto user = userService.getUserByEmail(principal.getName());
+    public ResponseEntity<?> subscribe(@RequestBody SubscriptionPaymentDto subscriptionDto, Principal principal) {
         try {
-        stripeService.purchaseSubscription(user.getStripeCustomerId(), subscriptionDto);
-        }
-        catch(Exception e){
+
+            stripeService.purchaseSubscription(subscriptionDto, principal);
+        } catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
         return ResponseEntity.status(200).build();
@@ -38,6 +35,37 @@ public class SubscriptionController {
 
     @PostMapping("/cancel")
     public ResponseEntity<?> cancel(Principal principal) {
+        return ResponseEntity.status(400).build();
+
+    }
+
+    @GetMapping("getsecretkey")
+    public ResponseEntity<?> getClientSecret(Principal principal) {
+
+        try{
+
+            String clientSecret = stripeService.getClientSecret();
+            return ResponseEntity.status(200).body(new ClientSecretDto(clientSecret));
+
+        }
+        catch(Exception e){
+                        return ResponseEntity.status(400).body(e.getMessage());
+
+        }
+    }
+
+    @PostMapping("/confirmsubscription")
+    public ResponseEntity<?> confirm(@RequestBody PaymentIntentDto paymentIntentDto, Principal principal) {
+        //Activate subscription here
+        try{
+        boolean successful = stripeService.confirmPaymentIntent(paymentIntentDto);
+        if (successful)
+            return ResponseEntity.status(200).build();
+        }
+        catch(Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
+        
         return ResponseEntity.status(400).build();
 
     }
