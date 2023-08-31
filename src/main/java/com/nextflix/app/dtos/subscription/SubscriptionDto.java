@@ -18,7 +18,9 @@ public class SubscriptionDto {
     private Timestamp startDate;
     private Timestamp endDate;
     private String stripeId;
-
+    private Long userId;
+    private String clientSecret;
+    
     public SubscriptionDto(Subscription subscription){
         this.id = subscription.getId();
         this.active = subscription.isActive();
@@ -26,5 +28,6 @@ public class SubscriptionDto {
         this.startDate = subscription.getStartDate();
         this.endDate = subscription.getEndDate();
         this.stripeId = subscription.getStripeId();
+        this.userId = subscription.getUser().getId();
     }
 }

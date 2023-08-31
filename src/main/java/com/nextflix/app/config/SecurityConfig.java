@@ -44,6 +44,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 					auth.requestMatchers(HttpMethod.GET, "/api/v1/admin/**").hasRole("ADMIN");
 					auth.requestMatchers("/api/v1/movie/**").hasAnyRole("USER", "ADMIN");
 					auth.requestMatchers("/api/v1/subscription/**").hasAnyRole("USER", "ADMIN");
+					auth.requestMatchers("/api/v1/customer/**").hasAnyRole("USER", "ADMIN");
 					auth.anyRequest().authenticated();
 				})
 				.httpBasic(Customizer.withDefaults())
@@ -75,11 +76,10 @@ public class SecurityConfig implements WebMvcConfigurer {
 	}
 
 	@Bean
-	CorsConfigurationSource corsConfigurationSource()
-	{
+	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-		configuration.setAllowedMethods(Arrays.asList("GET","POST", "PUT", "DELETE"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
 		configuration.setAllowedHeaders(Arrays.asList("*"));
 		configuration.setAllowCredentials(true);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

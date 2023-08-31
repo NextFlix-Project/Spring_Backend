@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nextflix.app.dtos.user.UserResponseDto;
 import com.nextflix.app.dtos.user.UserAdminResponseDto;
+import com.nextflix.app.dtos.user.UserDto;
 import com.nextflix.app.enums.UserRole;
 
 import jakarta.persistence.*;
@@ -61,5 +62,13 @@ public class User {
         this.firstName = userResponseDto.getFirstName() != null ? userResponseDto.getFirstName() : null;
         this.lastName = userResponseDto.getLastName() != null ? userResponseDto.getLastName() : null;
         this.email = userResponseDto.getEmail() != null ? userResponseDto.getEmail() : null;
+    }
+
+    public User(UserDto user) {
+        this.id = user.getId();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.role = user.getRole();
     }
 }

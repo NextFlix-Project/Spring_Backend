@@ -72,7 +72,9 @@ public class UserServiceImpl implements UserService {
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
-
+        user.setStripeCustomerId(userDto.getStripeCustomerId());
+        user.setStripePaymentMethodId(userDto.getStripePaymentMethodId());
+        
         UserRole role = userDto.getRole();
         if (role == UserRole.ADMIN || role == UserRole.USER)
             user.setRole(role);

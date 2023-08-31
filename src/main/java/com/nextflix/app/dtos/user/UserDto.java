@@ -35,6 +35,7 @@ public class UserDto {
     @Email(message = "Not a valid email")
     private String email;
     private String stripeCustomerId;
+    private String stripePaymentMethodId;
     private UserRole role;
 
     private List<WatchList> watchList = new ArrayList<>();
@@ -46,6 +47,8 @@ public class UserDto {
         this.lastName = user.getLastName() != null ? user.getLastName() : null;
         this.email = user.getEmail() != null ? user.getEmail() : null;
         this.stripeCustomerId = user.getStripeCustomerId() != null ? user.getStripeCustomerId() : null;
+        this.stripePaymentMethodId = user.getStripePaymentMethodId() != null ? user.getStripePaymentMethodId() : null;
+
         this.role = user.getRole() != null ? user.getRole() : null;
     }
 
@@ -58,6 +61,7 @@ public class UserDto {
             this.lastName = usr.getLastName() != null ? usr.getLastName() : null;
             this.email = usr.getEmail() != null ? usr.getEmail() : null;
             this.stripeCustomerId = usr.getStripeCustomerId() != null ? usr.getStripeCustomerId() : null;
+            this.stripePaymentMethodId = usr.getStripePaymentMethodId() != null ? usr.getStripePaymentMethodId() : null;
 
             this.role = usr.getRole() != null ? usr.getRole() : null;
         });

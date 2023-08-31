@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CustomerDto {
     private String customerId;
+    private String paymentId;
     private String email;
     private String name;
     private String city;
@@ -16,4 +17,5 @@ public class CustomerDto {
     private String address;
     private String state;
     private String postalCode;
+    private String paymentMethod;
 }

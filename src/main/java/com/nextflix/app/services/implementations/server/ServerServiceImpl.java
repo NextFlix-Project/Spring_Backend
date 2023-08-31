@@ -41,7 +41,6 @@ public class ServerServiceImpl implements ServerService {
         newServer.setType(server.getServerType());
 
         return new ServerDto(serverRepository.save(newServer));
-
     }
 
     @Override
