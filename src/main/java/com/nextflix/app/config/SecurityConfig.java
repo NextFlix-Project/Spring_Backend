@@ -24,6 +24,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.nextflix.app.component.AuthEntryPoint;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig implements WebMvcConfigurer {
@@ -31,11 +33,15 @@ public class SecurityConfig implements WebMvcConfigurer {
 	@Autowired
 	private UserDetailsService userDetailsService;
 
+	@Autowired
+	private AuthEntryPoint authEntryPoint;
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
 				.cors(Customizer.withDefaults())
 				.csrf(csrf -> csrf.disable())
+				.exceptionHandling(excptHand -> excptHand.authenticationEntryPoint(authEntryPoint))
 				.sessionManagement(session -> {
 					session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
 				}).authorizeHttpRequests(auth -> {

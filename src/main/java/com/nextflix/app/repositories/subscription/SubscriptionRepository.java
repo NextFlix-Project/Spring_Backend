@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.nextflix.app.dtos.subscription.SubscriptionDto;
-import com.nextflix.app.dtos.user.UserDto;
 import com.nextflix.app.entities.Subscription;
 import com.nextflix.app.entities.User;
 

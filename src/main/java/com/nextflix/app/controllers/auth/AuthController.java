@@ -79,7 +79,7 @@ public class AuthController {
         if (authentication != null && authentication.isAuthenticated()) {
             return ResponseEntity.ok().build();
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(400).build();
         }
     }
 }
