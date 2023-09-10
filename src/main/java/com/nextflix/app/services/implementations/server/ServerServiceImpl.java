@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.nextflix.app.dtos.server.ServerDto;
@@ -14,6 +15,7 @@ import com.nextflix.app.services.interfaces.server.ServerService;
 
 @Service
 public class ServerServiceImpl implements ServerService {
+    
     @Autowired
     ServerRepository serverRepository;
 
@@ -29,7 +31,7 @@ public class ServerServiceImpl implements ServerService {
 
     @Override
     public List<ServerDto> getAllServers() {
-        return serverRepository.findAll().stream().map((server) -> new ServerDto(server)).collect(Collectors.toList());
+        return serverRepository.findAll(Sort.by(Sort.Order.asc("id"))).stream().map((server) -> new ServerDto(server)).collect(Collectors.toList());
     }
 
     @Override

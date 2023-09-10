@@ -1,5 +1,7 @@
 package com.nextflix.app.controllers.auth;
 
+import java.security.Principal;
+
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nextflix.app.dtos.auth.LoginDto;
 import com.nextflix.app.dtos.user.UserDto;
+import com.nextflix.app.enums.UserRole;
 import com.nextflix.app.services.interfaces.user.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -74,12 +77,16 @@ public class AuthController {
     }
 
     @GetMapping("/authenticated")
-    public ResponseEntity<?> authenticated(){
+    public ResponseEntity<?> authenticated(Principal principal){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            return ResponseEntity.ok().build();
+        if (authentication != null && authentication.isAuthenticated() && principal != null) {
+            UserRole role = userService.getUserByEmail(principal.getName()).getRole();
+            return ResponseEntity.status(200).body(role);
         } else {
             return ResponseEntity.status(400).build();
         }
     }
+
+ 
+
 }

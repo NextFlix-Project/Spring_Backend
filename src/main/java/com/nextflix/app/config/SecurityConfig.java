@@ -45,15 +45,19 @@ public class SecurityConfig implements WebMvcConfigurer {
 				.sessionManagement(session -> {
 					session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
 				}).authorizeHttpRequests(auth -> {
-					auth.requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll();
+					auth.requestMatchers("/api/v1/auth/**").permitAll();
 					auth.requestMatchers("/api/v1/server/internal/**").permitAll();
-					auth.requestMatchers(HttpMethod.GET, "/api/v1/admin/**").hasRole("ADMIN");
+					auth.requestMatchers("/api/v1/admin/user/**").hasRole("ADMIN");
+					auth.requestMatchers("/api/v1/admin/movie/**").hasRole("ADMIN");
 					auth.requestMatchers("/api/v1/movie/**").hasAnyRole("USER", "ADMIN");
 					auth.requestMatchers("/api/v1/subscription/**").hasAnyRole("USER", "ADMIN");
 					auth.requestMatchers("/api/v1/customer/**").hasAnyRole("USER", "ADMIN");
+					auth.requestMatchers("/api/v1/user/**").hasAnyRole("USER", "ADMIN");
 					auth.anyRequest().authenticated();
 				})
-				.httpBasic(Customizer.withDefaults())
+				.httpBasic(Customizer.withDefaults()).logout(logout -> {
+					logout.logoutUrl("/api/v1/user/logout");
+				})
 				.build();
 	}
 

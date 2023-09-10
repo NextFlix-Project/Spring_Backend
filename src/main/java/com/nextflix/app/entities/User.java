@@ -45,6 +45,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @OneToOne(mappedBy = "user")
+    @JsonManagedReference
+    private Subscription subscription;
+
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private List<WatchList> watchList = new ArrayList<>();

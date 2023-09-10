@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.nextflix.app.dtos.movie.MovieAddDto;
 import com.nextflix.app.dtos.movie.MovieAdminDto;
 import com.nextflix.app.dtos.movie.MovieDto;
 
@@ -40,8 +41,7 @@ public class Movie {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp releaseDate; 
-
-    @OneToMany(mappedBy = "movie")
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Rating> ratings = new ArrayList<>();
 
@@ -53,6 +53,16 @@ public class Movie {
     }
 
     public Movie(MovieAdminDto movie){
+        this.id = movie.getId();
+        this.title = movie.getTitle();
+        this.description = movie.getDescription();
+        this.url = movie.getUrl();
+        this.boxArtUrl = movie.getBoxArtUrl();
+        this.active = movie.isActive();
+        this.releaseDate = movie.getReleaseDate();
+    }
+
+       public Movie(MovieAddDto movie){
         this.id = movie.getId();
         this.title = movie.getTitle();
         this.description = movie.getDescription();

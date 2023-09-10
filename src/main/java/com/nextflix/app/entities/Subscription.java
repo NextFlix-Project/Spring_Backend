@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import jakarta.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -38,6 +39,7 @@ public class Subscription {
     private String stripeId;
 
     @OneToOne
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 

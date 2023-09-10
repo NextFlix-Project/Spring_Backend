@@ -16,4 +16,6 @@ public interface UserService {
         List<UserAdminResponseDto> getAllUsers();
 
         User updateUser(UserDto user);
+        
+        boolean deleteUser(UserDto user);
 }

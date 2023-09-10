@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.nextflix.app.dtos.subscription.SubscriptionDto;
 import com.nextflix.app.entities.User;
 import com.nextflix.app.entities.WatchList;
 import com.nextflix.app.enums.UserRole;
@@ -37,7 +38,7 @@ public class UserDto {
     private String stripeCustomerId;
     private String stripePaymentMethodId;
     private UserRole role;
-
+ 
     private List<WatchList> watchList = new ArrayList<>();
 
     public UserDto(User user) {
