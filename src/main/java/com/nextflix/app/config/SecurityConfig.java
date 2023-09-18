@@ -6,7 +6,6 @@ import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
@@ -41,15 +40,17 @@ public class SecurityConfig implements WebMvcConfigurer {
 		return http
 				.cors(Customizer.withDefaults())
 				.csrf(csrf -> csrf.disable())
-				.exceptionHandling(excptHand -> excptHand.authenticationEntryPoint(authEntryPoint))
 				.sessionManagement(session -> {
 					session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
 				}).authorizeHttpRequests(auth -> {
 					auth.requestMatchers("/api/v1/auth/**").permitAll();
 					auth.requestMatchers("/api/v1/server/internal/**").permitAll();
+					auth.requestMatchers("/api/v1/file/image/**").permitAll();
 					auth.requestMatchers("/api/v1/admin/user/**").hasRole("ADMIN");
 					auth.requestMatchers("/api/v1/admin/movie/**").hasRole("ADMIN");
 					auth.requestMatchers("/api/v1/movie/**").hasAnyRole("USER", "ADMIN");
+					auth.requestMatchers("/api/v1/rating/**").hasAnyRole("USER", "ADMIN");
+					auth.requestMatchers("/api/v1/movie/streammovie**").hasAnyRole("USER", "ADMIN");
 					auth.requestMatchers("/api/v1/subscription/**").hasAnyRole("USER", "ADMIN");
 					auth.requestMatchers("/api/v1/customer/**").hasAnyRole("USER", "ADMIN");
 					auth.requestMatchers("/api/v1/user/**").hasAnyRole("USER", "ADMIN");
@@ -58,6 +59,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 				.httpBasic(Customizer.withDefaults()).logout(logout -> {
 					logout.logoutUrl("/api/v1/user/logout");
 				})
+				.exceptionHandling(excptHand -> excptHand.authenticationEntryPoint(authEntryPoint))
 				.build();
 	}
 

@@ -37,11 +37,12 @@ public class User {
     @Column
     private String lastName;
 
-    @Column 
-    private String stripeCustomerId;    
+    @Column
+    private String stripeCustomerId;
 
-    @Column String stripePaymentMethodId;
-    
+    @Column
+    String stripePaymentMethodId;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
@@ -52,6 +53,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private List<WatchList> watchList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<Rating> rating = new ArrayList<>();
 
     public User(UserAdminResponseDto userResponseDto) {
         this.id = userResponseDto.getId() != null ? userResponseDto.getId() : null;

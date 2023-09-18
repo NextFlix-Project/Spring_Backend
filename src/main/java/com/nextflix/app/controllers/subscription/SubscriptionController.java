@@ -18,7 +18,6 @@ import com.nextflix.app.dtos.subscription.SubscriptionDto;
 import com.nextflix.app.dtos.subscription.SubscriptionUserInfoDto;
 import com.nextflix.app.dtos.user.UserResponseDto;
 import com.nextflix.app.services.interfaces.external.stripe.StripeService;
-import com.nextflix.app.services.interfaces.payment.PaymentService;
 import com.nextflix.app.services.interfaces.product.ProductService;
 import com.nextflix.app.services.interfaces.subscription.SubscriptionService;
 import com.nextflix.app.services.interfaces.user.UserService;
@@ -36,9 +35,6 @@ public class SubscriptionController {
 
     @Autowired
     private SubscriptionService subscriptionService;
-
-    @Autowired
-    private PaymentService paymentService;
 
     @Autowired
     private ProductService productService;

@@ -13,6 +13,7 @@ import com.nextflix.app.entities.User;
 import com.nextflix.app.repositories.subscription.SubscriptionRepository;
 import com.nextflix.app.repositories.user.UserRepository;
 import com.nextflix.app.services.interfaces.subscription.SubscriptionService;
+import com.stripe.exception.StripeException;
 
 @Service
 public class SubscriptionServiceImpl implements SubscriptionService {
@@ -58,7 +59,16 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public SubscriptionDto getSubscriptionByUser(UserDto user) {
-        return new SubscriptionDto(subscriptionRepository.findByUser(new User(user)).get(0));
+    public SubscriptionDto getSubscriptionByUser(UserDto user) throws StripeException {
+
+        try{
+        SubscriptionDto subscriptionDto = new SubscriptionDto(subscriptionRepository.getByUserId(user.getId()));
+
+        return subscriptionDto;
+        }
+        catch(Exception e){
+            System.out.println("Error finding subscription.  Error: " + e.getMessage());
+            return null;
+        }
     }
 }

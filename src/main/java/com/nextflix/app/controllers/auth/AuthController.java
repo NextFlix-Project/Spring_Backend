@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nextflix.app.dtos.auth.LoginDto;
 import com.nextflix.app.dtos.user.UserDto;
+import com.nextflix.app.dtos.user.UserRegisterDto;
 import com.nextflix.app.enums.UserRole;
 import com.nextflix.app.services.interfaces.user.UserService;
 
@@ -62,13 +63,19 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserDto registrationDto, HttpSession httpSession) {
+    public ResponseEntity<?> register(@RequestBody UserRegisterDto registrationDto, HttpSession httpSession) {
         try {
         
             if (!EmailValidator.getInstance().isValid(registrationDto.getEmail()))
                 throw new Exception("Not a valid email address.");
+                
+            UserDto newUser = new UserDto();
+            newUser.setEmail(registrationDto.getEmail());
+            newUser.setFirstName(registrationDto.getFirstName());
+            newUser.setLastName(registrationDto.getLastName());
+            newUser.setPassword(registrationDto.getPassword());
 
-            userService.registerUser(registrationDto);
+            userService.registerUser(newUser);
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {

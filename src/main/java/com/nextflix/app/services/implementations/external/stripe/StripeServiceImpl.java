@@ -18,12 +18,11 @@ import com.nextflix.app.dtos.stripe.SubscriptionProductDto;
 import com.nextflix.app.dtos.subscription.SubscriptionDto;
 import com.nextflix.app.dtos.user.UserDto;
 import com.nextflix.app.entities.SubscriptionProduct;
-import com.nextflix.app.entities.User;
-import com.nextflix.app.repositories.porduct.ProductRepository;
-import com.nextflix.app.repositories.user.UserRepository;
+import com.nextflix.app.repositories.product.ProductRepository;
 import com.nextflix.app.services.interfaces.external.stripe.StripeService;
 import com.nextflix.app.services.interfaces.subscription.SubscriptionService;
 import com.nextflix.app.services.interfaces.user.UserService;
+
 import com.stripe.Stripe;
 import com.stripe.exception.InvalidRequestException;
 import com.stripe.exception.StripeException;
@@ -33,7 +32,6 @@ import com.stripe.model.PaymentMethod;
 import com.stripe.model.Price;
 import com.stripe.model.Product;
 import com.stripe.model.Subscription;
-import com.stripe.model.Invoice.PaymentSettings.PaymentMethodOptions;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.SubscriptionCreateParams;
 import com.stripe.param.PaymentIntentCreateParams;
@@ -50,9 +48,6 @@ public class StripeServiceImpl implements StripeService {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private SubscriptionService subscriptionService;
@@ -169,6 +164,7 @@ public class StripeServiceImpl implements StripeService {
             PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
                     .setAmount(999L)
                     .setCurrency("usd")
+                    .addPaymentMethodType("card")
                     .build();
 
             PaymentIntent paymentIntent = PaymentIntent.create(params);
@@ -180,14 +176,14 @@ public class StripeServiceImpl implements StripeService {
         }
     }
 
-        @Override
+    @Override
     public String getClientSecret(Principal principal) throws StripeException {
         Stripe.apiKey = apiKey;
         try {
             UserDto user = userService.getUserByEmail(principal.getName());
             PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
-            .setCustomer(user.getStripeCustomerId())
-            .setPaymentMethod(user.getStripePaymentMethodId())
+                    .setCustomer(user.getStripeCustomerId())
+                    .setPaymentMethod(user.getStripePaymentMethodId())
                     .setAmount(999L)
                     .setCurrency("usd")
                     .build();
@@ -204,7 +200,7 @@ public class StripeServiceImpl implements StripeService {
     @Override
     public SubscriptionDto purchaseSubscription(CustomerDto customerDto, Principal principal)
             throws StripeException {
-            UserDto user = userService.getUserByEmail(principal.getName());
+        UserDto user = userService.getUserByEmail(principal.getName());
         try {
             String priceId = productRepository.findFirstByOrderById().getProductId();
 
@@ -240,8 +236,9 @@ public class StripeServiceImpl implements StripeService {
 
             SubscriptionDto subscriptionDto = new SubscriptionDto();
             subscriptionDto.setStripeId(subscription.getId());
-            subscriptionDto.setClientSecret(subscription.getLatestInvoiceObject().getPaymentIntentObject().getClientSecret());
-            
+            subscriptionDto
+                    .setClientSecret(subscription.getLatestInvoiceObject().getPaymentIntentObject().getClientSecret());
+
             return subscriptionDto;
         } catch (StripeException e) {
             System.out.println(e.getMessage());
@@ -268,15 +265,13 @@ public class StripeServiceImpl implements StripeService {
 
     @Override
     public Subscription getSubscription(Principal principal) throws StripeException {
-          try {
+        try {
             UserDto userDto = userService.getUserByEmail(principal.getName());
             SubscriptionDto subscriptionDto = subscriptionService.getSubscriptionByUser(userDto);
             Stripe.apiKey = apiKey;
 
-            Subscription subscription =
-            Subscription.retrieve(
-              subscriptionDto.getStripeId()
-            );
+            Subscription subscription = Subscription.retrieve(
+                    subscriptionDto.getStripeId());
             return subscription;
 
         } catch (StripeException e) {
@@ -287,16 +282,17 @@ public class StripeServiceImpl implements StripeService {
 
     @Override
     public boolean isSubscriptionActive(Principal principal) throws StripeException {
-          try {
+        try {
             UserDto userDto = userService.getUserByEmail(principal.getName());
             SubscriptionDto subscriptionDto = subscriptionService.getSubscriptionByUser(userDto);
             Stripe.apiKey = apiKey;
+            
+            if (subscriptionDto == null) return false;
+            Subscription subscription = Subscription.retrieve(
+                    subscriptionDto.getStripeId());
 
-            Subscription subscription =
-            Subscription.retrieve(
-              subscriptionDto.getStripeId()
-            );
-            return subscription.getStatus().equals("active");
+            
+            return subscription != null ? subscription.getStatus().equals("active") : false;
 
         } catch (StripeException e) {
             System.out.println(e.getMessage());

@@ -14,3 +14,7 @@
 | server.servlet.session.timeout        | `31536000s`                               |
 | stripe_apikey                         | `Stripe API key`                          |
 | video_server_apikey                   | `API key shared with video servers`       |
+| spring.servlet.multipart.max-request-size=10GB |   |
+| spring.servlet.multipart.enabled=true |  |  
+| spring.servlet.multipart.file-size-threshold=2KB| |
+| file.upload-dir=./uploads||

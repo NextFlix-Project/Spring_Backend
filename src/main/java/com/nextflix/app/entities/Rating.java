@@ -26,8 +26,9 @@ public class Rating {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     public Rating(RatingDto ratingDto){

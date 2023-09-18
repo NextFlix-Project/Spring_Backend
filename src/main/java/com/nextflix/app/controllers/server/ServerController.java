@@ -23,7 +23,7 @@ public class ServerController {
     private ServerService serverService;
 
     @PostMapping("/internal/registerserver")
-    public ResponseEntity<String> addServer(@RequestBody ServerDto server, HttpServletRequest request) {
+    public ResponseEntity<?> addServer(@RequestBody ServerDto server, HttpServletRequest request) {
         String ipAddr = request.getRemoteAddr();
  
         ServerDto foundServer = serverService.getServerByUrlAndPort(ipAddr, server.getPort());

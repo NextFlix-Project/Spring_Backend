@@ -16,12 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nextflix.app.dtos.payment.CreditCardDto;
 import com.nextflix.app.dtos.payment.CustomerAndPaymentDto;
 import com.nextflix.app.dtos.payment.CustomerDto;
-import com.nextflix.app.dtos.payment.PaymentDto;
-import com.nextflix.app.dtos.payment.PaymentTokenDto;
 import com.nextflix.app.dtos.user.UserDto;
 import com.nextflix.app.services.interfaces.external.stripe.StripeService;
-import com.nextflix.app.services.interfaces.payment.PaymentService;
 import com.nextflix.app.services.interfaces.user.UserService;
+
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentMethod;
 
@@ -32,8 +30,6 @@ public class CustomerController {
     private StripeService stripeService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private PaymentService paymentService;
 
     @PostMapping("/createpayment")
     public ResponseEntity<?> createPayment(@RequestBody CreditCardDto paymentDto, Principal principal)
@@ -66,8 +62,6 @@ public class CustomerController {
             if (userDto.getStripePaymentMethodId() == null)
                 return ResponseEntity.status(400).body("No payment method");
 
-           
-
             customerDto.setEmail(principal.getName());
 
             CustomerAndPaymentDto customerAndPaymentDto = stripeService.createCustomer(customerDto);
@@ -82,5 +76,4 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
-
 }
