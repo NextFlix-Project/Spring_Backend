@@ -1,7 +1,6 @@
 package com.nextflix.app.controllers.ratings;
 
 import java.security.Principal;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
