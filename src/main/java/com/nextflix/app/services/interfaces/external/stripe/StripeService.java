@@ -37,5 +37,6 @@ public interface StripeService {
     public void cancelSubscription(Principal principal) throws StripeException;
 
     public Subscription getSubscription(Principal principal) throws StripeException;
+
     public boolean isSubscriptionActive(Principal principal) throws StripeException;
 }

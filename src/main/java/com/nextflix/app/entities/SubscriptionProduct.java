@@ -34,7 +34,7 @@ public class SubscriptionProduct {
     @Column
     private String productId;
 
-    public SubscriptionProduct(SubscriptionProductDto productDto){
+    public SubscriptionProduct(SubscriptionProductDto productDto) {
         this.name = productDto.getName();
         this.description = productDto.getDescription();
         this.price = productDto.getPrice();

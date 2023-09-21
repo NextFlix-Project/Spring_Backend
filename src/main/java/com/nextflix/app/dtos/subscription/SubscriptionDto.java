@@ -20,8 +20,8 @@ public class SubscriptionDto {
     private String stripeId;
     private Long userId;
     private String clientSecret;
-    
-    public SubscriptionDto(Subscription subscription){
+
+    public SubscriptionDto(Subscription subscription) {
         this.id = subscription.getId();
         this.active = subscription.isActive();
         this.autoRenew = subscription.isAutoRenew();

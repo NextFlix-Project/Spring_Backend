@@ -1,6 +1,5 @@
 package com.nextflix.app.dtos.watchlist;
 
- 
 import java.sql.Timestamp;
 
 import com.nextflix.app.dtos.movie.MovieDto;
@@ -18,7 +17,7 @@ public class WatchListDto {
     private MovieDto movie;
     private Timestamp createdAt;
 
-    public WatchListDto(WatchList watchList){
+    public WatchListDto(WatchList watchList) {
         this.id = watchList.getId();
         this.movie = new MovieDto(watchList.getMovie());
         this.createdAt = watchList.getCreatedAt();

@@ -45,7 +45,6 @@ public class CustomerController {
             return ResponseEntity.ok().build();
 
         } catch (AuthenticationException e) {
-
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }

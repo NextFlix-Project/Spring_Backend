@@ -12,7 +12,6 @@ import com.nextflix.app.entities.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-
     @Query("SELECT u FROM User u LEFT JOIN u.subscription s ORDER BY u.id")
     List<User> findAllUsers();
 

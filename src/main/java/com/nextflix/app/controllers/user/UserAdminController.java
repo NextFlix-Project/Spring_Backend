@@ -64,8 +64,8 @@ public class UserAdminController {
 
         try {
             List<UserAdminResponseDto> allUsers = userService.getAllUsers();
-            return ResponseEntity.ok(allUsers); 
-            
+            return ResponseEntity.ok(allUsers);
+
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -73,13 +73,13 @@ public class UserAdminController {
     }
 
     @PostMapping("/deleteuser")
-    public ResponseEntity<?> deleteUser(@RequestBody UserDto user){
-        try{
+    public ResponseEntity<?> deleteUser(@RequestBody UserDto user) {
+
+        try {
             userService.deleteUser(user);
-             return ResponseEntity.status(200).build();
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
+            return ResponseEntity.status(200).build();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
 
         return ResponseEntity.notFound().build();

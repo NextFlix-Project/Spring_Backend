@@ -15,7 +15,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.nextflix.app.dtos.server.ServerDto;
 import com.nextflix.app.services.interfaces.server.ServerService;
-
 @Component
 @EnableAsync
 public class ServerHeartbeatScheduler {
@@ -32,11 +31,13 @@ public class ServerHeartbeatScheduler {
     @Async
     @Scheduled(fixedDelay = 5000)
     public void checkHeartbeats() throws URISyntaxException {
+
         List<ServerDto> servers = new ArrayList<>();
+
         try {
             servers = serverService.getAllServers();
         } catch (Exception e) {
-
+            return;
         }
         for (ServerDto server : servers) {
 

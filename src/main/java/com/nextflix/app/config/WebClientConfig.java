@@ -10,6 +10,5 @@ public class WebClientConfig {
     @Bean
     public WebClient webClient() {
         return WebClient.create();
-
     }
 }

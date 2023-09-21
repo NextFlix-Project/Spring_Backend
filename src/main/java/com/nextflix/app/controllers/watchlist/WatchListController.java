@@ -46,13 +46,14 @@ public class WatchListController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addToWatchList(@RequestBody MovieDto movieDto, Principal principal) {
+
         try {
             UserDto user = userService.getUserByEmail(principal.getName());
             MovieDto movie = movieService.findById(movieDto.getId());
             watchListService.addToWatchlist(movie, user);
             return ResponseEntity.status(200).build();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
 
         return ResponseEntity.notFound().build();
@@ -60,12 +61,13 @@ public class WatchListController {
 
     @PostMapping("/delete")
     public ResponseEntity<?> deleteFromWatchList(@RequestBody WatchListDto watchListDto) {
+
         try {
             WatchListDto watchList = watchListService.findById(watchListDto.getId());
             watchListService.removeFromWatchList(watchList);
             return ResponseEntity.status(200).build();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
 
         return ResponseEntity.notFound().build();

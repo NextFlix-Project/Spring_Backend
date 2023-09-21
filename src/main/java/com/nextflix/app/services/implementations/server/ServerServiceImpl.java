@@ -15,52 +15,88 @@ import com.nextflix.app.services.interfaces.server.ServerService;
 
 @Service
 public class ServerServiceImpl implements ServerService {
-    
+
     @Autowired
     ServerRepository serverRepository;
 
     @Override
     public ServerDto getServersByType(ServerType serverType) {
-        return new ServerDto(serverRepository.findAllByType(serverType));
+        
+        try {
+            return new ServerDto(serverRepository.findAllByType(serverType));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public ServerDto getServerByUrlAndPort(String url, String port) {
-        return new ServerDto(serverRepository.findByUrlAndPort(url, port));
+
+        try {
+            return new ServerDto(serverRepository.findByUrlAndPort(url, port));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public List<ServerDto> getAllServers() {
-        return serverRepository.findAll(Sort.by(Sort.Order.asc("id"))).stream().map((server) -> new ServerDto(server)).collect(Collectors.toList());
+
+        try {
+            return serverRepository.findAll(Sort.by(Sort.Order.asc("id"))).stream()
+                    .map((server) -> new ServerDto(server))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public ServerDto addServer(ServerDto server) {
-        Server newServer = new Server();
 
-        newServer.setPort(server.getPort());
-        newServer.setUrl(server.getUrl());
-        newServer.setType(server.getServerType());
+        try {
+            Server newServer = new Server();
 
-        return new ServerDto(serverRepository.save(newServer));
+            newServer.setPort(server.getPort());
+            newServer.setUrl(server.getUrl());
+            newServer.setType(server.getServerType());
+
+            return new ServerDto(serverRepository.save(newServer));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public void removeServer(ServerDto server) {
-        serverRepository.deleteById(server.getId());
+
+        try {
+            serverRepository.deleteById(server.getId());
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     @Override
     public Server updateServer(ServerDto serverDto) {
 
-        Server server = new Server();
+        try {
+            Server server = new Server();
 
-        server.setId(serverDto.getId());
-        server.setPort(serverDto.getPort());
-        server.setUrl(serverDto.getUrl());
-        server.setType(serverDto.getServerType());
-        server.setFailedHeartbeat(serverDto.getFailedHeartbeat());
+            server.setId(serverDto.getId());
+            server.setPort(serverDto.getPort());
+            server.setUrl(serverDto.getUrl());
+            server.setType(serverDto.getServerType());
+            server.setFailedHeartbeat(serverDto.getFailedHeartbeat());
 
-        return serverRepository.saveAndFlush(server);
+            return serverRepository.saveAndFlush(server);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 }

@@ -28,7 +28,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
- 
+
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
@@ -64,11 +64,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserRegisterDto registrationDto, HttpSession httpSession) {
+
         try {
-        
+
             if (!EmailValidator.getInstance().isValid(registrationDto.getEmail()))
                 throw new Exception("Not a valid email address.");
-                
+
             UserDto newUser = new UserDto();
             newUser.setEmail(registrationDto.getEmail());
             newUser.setFirstName(registrationDto.getFirstName());
@@ -84,16 +85,19 @@ public class AuthController {
     }
 
     @GetMapping("/authenticated")
-    public ResponseEntity<?> authenticated(Principal principal){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() && principal != null) {
-            UserRole role = userService.getUserByEmail(principal.getName()).getRole();
-            return ResponseEntity.status(200).body(role);
-        } else {
-            return ResponseEntity.status(400).build();
+    public ResponseEntity<?> authenticated(Principal principal) {
+
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication != null && authentication.isAuthenticated() && principal != null) {
+                UserRole role = userService.getUserByEmail(principal.getName()).getRole();
+                return ResponseEntity.status(200).body(role);
+            } else {
+                return ResponseEntity.status(400).build();
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(500).build();
         }
     }
-
- 
-
 }

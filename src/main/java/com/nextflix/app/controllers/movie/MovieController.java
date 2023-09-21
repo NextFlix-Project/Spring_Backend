@@ -41,7 +41,7 @@ public class MovieController {
     @Autowired
     private UserService userService;
 
-    @Autowired 
+    @Autowired
     private SubscriptionService subscriptionService;
 
     @Autowired
@@ -55,8 +55,9 @@ public class MovieController {
             UserDto user = userService.getUserByEmail(principal.getName());
             MovieListDto movieListDto = new MovieListDto();
             movieListDto.setMovies(allMovies);
-            movieListDto.setRatings(user.getRatings().stream().map((rating) -> new RatingDto(rating)).collect(Collectors.toList()));
-            movieListDto.setWatchList(user.getWatchList().stream().map((watchList) -> new WatchListDto(watchList)).collect(Collectors.toList()));
+            movieListDto.setRatings(ratingService.findAll());
+            movieListDto.setWatchList(user.getWatchList().stream().map((watchList) -> new WatchListDto(watchList))
+                    .collect(Collectors.toList()));
 
             return ResponseEntity.ok(movieListDto);
         } catch (Exception e) {
@@ -75,7 +76,7 @@ public class MovieController {
                 return ResponseEntity.status(400).body("Not subscribed");
 
             ServerDto server = serverService.getServersByType(ServerType.STREAMING);
-            
+
             String url = "http://" + server.getUrl() + ":" + server.getPort() + "/stream?id=" + body.get("id");
 
             return ResponseEntity.ok(url);

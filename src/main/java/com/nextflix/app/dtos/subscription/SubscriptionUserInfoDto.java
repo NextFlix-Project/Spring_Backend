@@ -16,5 +16,5 @@ public class SubscriptionUserInfoDto {
     private SubscriptionProductDto subscription;
     @JsonProperty("user")
     private UserResponseDto user;
-    
+
 }

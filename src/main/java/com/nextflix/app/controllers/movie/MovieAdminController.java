@@ -75,13 +75,14 @@ public class MovieAdminController {
         movieAddDto.setDescription(description);
 
         movieAddDto.setActive(Boolean.parseBoolean(active));
-       
+
         if (video == null)
             return ResponseEntity.status(400).body("No image file attached");
         if (image == null)
             return ResponseEntity.status(400).body("No video file attached");
 
         MovieAdminDto movieAdminDto = null;
+        
         try {
             movieAdminDto = movieAdminService.addMovie(movieAddDto);
 
@@ -90,29 +91,26 @@ public class MovieAdminController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
 
-
         try {
-            movieAdminDto.setBoxArtUrl("./uploads/" + movieAdminDto.getId().toString() + "/" + image.getOriginalFilename());
+            movieAdminDto
+                    .setBoxArtUrl("./uploads/" + movieAdminDto.getId().toString() + "/" + image.getOriginalFilename());
             movieAdminService.updateMovie(movieAdminDto);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             movieAdminService.removeMovie(movieAdminDto);
             return ResponseEntity.status(400).body(e.getMessage());
         }
+
         try {
             fileService.saveFile(image, "./uploads/" + movieAdminDto.getId().toString());
         } catch (Exception e) {
             movieAdminService.removeMovie(movieAdminDto);
             return ResponseEntity.status(400).body(e.getMessage());
-
         }
 
         ServerDto server = serverService.getServersByType(ServerType.ENCODING);
 
         try {
-
             movieAdminService.sendVideoToEncoder(movieAdminDto.getId(), video, server);
-
         } catch (Exception e) {
             movieAdminService.removeMovie(movieAdminDto);
             return ResponseEntity.status(400).body("Error sending video to encoding server. Error: " + e.getMessage());
@@ -123,6 +121,7 @@ public class MovieAdminController {
 
     @PutMapping("/updatemovie")
     public ResponseEntity<?> updateMovie(@RequestBody MovieAdminDto movieAdminDto) {
+
         try {
             movieAdminService.updateMovie(movieAdminDto);
             return ResponseEntity.ok().build();
@@ -133,6 +132,7 @@ public class MovieAdminController {
 
     @PostMapping("/deletemovie")
     public ResponseEntity<?> deleteMovie(@RequestBody MovieAdminDto movieAdminDto) {
+
         try {
             movieAdminService.removeMovie(movieAdminDto);
             return ResponseEntity.ok().build();

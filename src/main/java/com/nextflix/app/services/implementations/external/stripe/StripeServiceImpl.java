@@ -54,6 +54,7 @@ public class StripeServiceImpl implements StripeService {
 
     @Override
     public SubscriptionProductDto createNewSubscription(Long amount, String name, String description) {
+
         try {
             Product product = createProduct(name);
             Price price = createPricing(amount, product);
@@ -61,8 +62,9 @@ public class StripeServiceImpl implements StripeService {
                     price.getUnitAmount());
             productRepository.save(new SubscriptionProduct(newProduct));
             return new SubscriptionProductDto(price.getId(), name, description, price.getUnitAmount());
+
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
 
             return null;
         }
@@ -71,42 +73,59 @@ public class StripeServiceImpl implements StripeService {
     @Override
 
     public Product createProduct(String name) throws StripeException {
-        Stripe.apiKey = apiKey;
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("name", name);
+        try {
+            Stripe.apiKey = apiKey;
 
-        return Product.create(params);
+            Map<String, Object> params = new HashMap<>();
+            params.put("name", name);
+
+            return Product.create(params);
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public Price createPricing(Long price, Product product) throws StripeException {
-        Stripe.apiKey = apiKey;
 
-        Map<String, Object> recurring = new HashMap<>();
-        recurring.put("interval", "month");
+        try {
+            Stripe.apiKey = apiKey;
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("unit_amount", price);
-        params.put("currency", "usd");
-        params.put("recurring", recurring);
-        params.put("product", product.getId());
+            Map<String, Object> recurring = new HashMap<>();
+            recurring.put("interval", "month");
 
-        return Price.create(params);
+            Map<String, Object> params = new HashMap<>();
+            params.put("unit_amount", price);
+            params.put("currency", "usd");
+            params.put("recurring", recurring);
+            params.put("product", product.getId());
+
+            return Price.create(params);
+
+        } catch (StripeException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public boolean confirmPaymentIntent(PaymentIntentDto paymentIntent) throws StripeException {
+
         try {
             Stripe.apiKey = apiKey;
 
             PaymentIntent payment = PaymentIntent.retrieve(paymentIntent.getIntent());
 
             String status = payment.getStatus();
+
             if (status.equals("succeeded"))
                 return true;
+
         } catch (StripeException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
 
@@ -128,8 +147,9 @@ public class StripeServiceImpl implements StripeService {
 
             Customer customer = Customer.create(params);
             return new CustomerAndPaymentDto(customer, new PaymentTokenDto(customerDto.getPaymentId()));
+
         } catch (StripeException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return null;
         }
     }
@@ -151,14 +171,16 @@ public class StripeServiceImpl implements StripeService {
             params.put("card", card);
 
             return PaymentMethod.create(params);
+
         } catch (StripeException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return null;
         }
     }
 
     @Override
     public String getClientSecret() throws StripeException {
+
         Stripe.apiKey = apiKey;
         try {
             PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
@@ -170,14 +192,16 @@ public class StripeServiceImpl implements StripeService {
             PaymentIntent paymentIntent = PaymentIntent.create(params);
 
             return paymentIntent.getClientSecret();
+
         } catch (StripeException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return null;
         }
     }
 
     @Override
     public String getClientSecret(Principal principal) throws StripeException {
+
         Stripe.apiKey = apiKey;
         try {
             UserDto user = userService.getUserByEmail(principal.getName());
@@ -191,8 +215,9 @@ public class StripeServiceImpl implements StripeService {
             PaymentIntent paymentIntent = PaymentIntent.create(params);
 
             return paymentIntent.getClientSecret();
+
         } catch (StripeException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return null;
         }
     }
@@ -200,7 +225,9 @@ public class StripeServiceImpl implements StripeService {
     @Override
     public SubscriptionDto purchaseSubscription(CustomerDto customerDto, Principal principal)
             throws StripeException {
+
         UserDto user = userService.getUserByEmail(principal.getName());
+
         try {
             String priceId = productRepository.findFirstByOrderById().getProductId();
 
@@ -240,8 +267,9 @@ public class StripeServiceImpl implements StripeService {
                     .setClientSecret(subscription.getLatestInvoiceObject().getPaymentIntentObject().getClientSecret());
 
             return subscriptionDto;
+
         } catch (StripeException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return null;
         }
 
@@ -258,13 +286,15 @@ public class StripeServiceImpl implements StripeService {
             Subscription subscription = Subscription.retrieve(subscriptionDto.getStripeId());
 
             subscription.cancel();
+
         } catch (StripeException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 
     @Override
     public Subscription getSubscription(Principal principal) throws StripeException {
+
         try {
             UserDto userDto = userService.getUserByEmail(principal.getName());
             SubscriptionDto subscriptionDto = subscriptionService.getSubscriptionByUser(userDto);
@@ -275,27 +305,29 @@ public class StripeServiceImpl implements StripeService {
             return subscription;
 
         } catch (StripeException e) {
-            System.out.println(e.getMessage());
+
+            System.err.println(e.getMessage());
             return null;
         }
     }
 
     @Override
     public boolean isSubscriptionActive(Principal principal) throws StripeException {
+
         try {
             UserDto userDto = userService.getUserByEmail(principal.getName());
             SubscriptionDto subscriptionDto = subscriptionService.getSubscriptionByUser(userDto);
             Stripe.apiKey = apiKey;
-            
-            if (subscriptionDto == null) return false;
+
+            if (subscriptionDto == null)
+                return false;
             Subscription subscription = Subscription.retrieve(
                     subscriptionDto.getStripeId());
 
-            
             return subscription != null ? subscription.getStatus().equals("active") : false;
 
         } catch (StripeException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             return false;
         }
     }

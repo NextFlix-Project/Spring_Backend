@@ -12,8 +12,10 @@ import com.nextflix.app.entities.User;
 
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
-    public  List<Subscription>  findByUser(User user);
-    @Query(value="SELECT s FROM Subscription s WHERE s.user_id = :id", nativeQuery = true)
+    public List<Subscription> findByUser(User user);
+
+    @Query(value = "SELECT s FROM Subscription s WHERE s.user_id = :id", nativeQuery = true)
     public SubscriptionDto findByUserId(Long id);
+
     public Subscription getByUserId(Long id);
 }

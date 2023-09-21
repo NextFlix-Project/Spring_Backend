@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.nextflix.app.entities.Rating;
- 
+
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Long> {
     @Query("SELECT r FROM Rating r WHERE r.movie.id = :movieId AND r.user.id = :userId")

@@ -6,6 +6,8 @@ import com.nextflix.app.dtos.watchlist.WatchListDto;
 
 public interface WatchListService {
     void addToWatchlist(MovieDto movieDto, UserDto userDto) throws Exception;
-    WatchListDto findById(Long id) throws Exception ;
+
+    WatchListDto findById(Long id) throws Exception;
+
     void removeFromWatchList(WatchListDto watchList) throws Exception;
 }

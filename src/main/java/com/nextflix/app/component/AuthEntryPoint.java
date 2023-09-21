@@ -25,6 +25,6 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
 
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unauthorized");
 
-        }  
+        }
     }
 }

@@ -1,5 +1,5 @@
 package com.nextflix.app.entities;
- 
+
 import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;

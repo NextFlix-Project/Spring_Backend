@@ -6,5 +6,6 @@ import com.nextflix.app.dtos.movie.MovieDto;
 
 public interface MovieService {
     public List<MovieDto> getActiveMovies();
+
     public MovieDto findById(Long id);
 }

@@ -41,8 +41,8 @@ public class SubscriptionController {
 
     @PostMapping("/subscribe")
     public ResponseEntity<?> subscribe(@RequestBody CustomerDto customerDto, Principal principal) {
-        try {
 
+        try {
             SubscriptionDto subscriptionDto = stripeService.purchaseSubscription(customerDto, principal);
             subscriptionDto.setUserId(userService.getUserByEmail(principal.getName()).getId());
 
@@ -57,13 +57,13 @@ public class SubscriptionController {
 
     @PostMapping("/cancel")
     public ResponseEntity<?> cancel(Principal principal) throws StripeException {
+
         try {
             stripeService.cancelSubscription(principal);
             return ResponseEntity.status(200).build();
         } catch (Exception e) {
             return ResponseEntity.status(400).build();
         }
-
     }
 
     @GetMapping("getsecretkey")
@@ -76,14 +76,12 @@ public class SubscriptionController {
 
         } catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());
-
         }
     }
 
     @PostMapping("/confirmsubscription")
     public ResponseEntity<?> confirm(@RequestBody PaymentIntentDto paymentIntentDto, Principal principal) {
-        // Activate subscription here add db record
-        // Also add payment record
+
         try {
             boolean successful = stripeService.confirmPaymentIntent(paymentIntentDto);
             if (successful)
@@ -93,11 +91,11 @@ public class SubscriptionController {
         }
 
         return ResponseEntity.status(400).build();
-
     }
 
     @GetMapping("/getsubscription")
     public ResponseEntity<?> getSubscription(Principal principal) {
+
         try {
             SubscriptionProductDto subscriptionProductDto = productService.getProduct();
             UserResponseDto userResponseDto = new UserResponseDto(userService.getUserByEmail(principal.getName()));
@@ -112,7 +110,8 @@ public class SubscriptionController {
 
     @GetMapping("/isactive")
     public ResponseEntity<?> getIsSubscriptionActive(Principal principal) {
-      try {
+
+        try {
             boolean isActive = stripeService.isSubscriptionActive(principal);
             return ResponseEntity.status(200).body(isActive);
         } catch (Exception e) {

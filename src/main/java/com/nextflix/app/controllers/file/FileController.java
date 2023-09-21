@@ -33,7 +33,7 @@ public class FileController {
         try {
             MovieDto movieDto = movieService.findById(movieId);
             byte[] file = fileService.getFile(movieDto.getBoxArtUrl());
-           
+
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.IMAGE_PNG);
 

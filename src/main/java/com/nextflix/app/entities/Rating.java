@@ -31,7 +31,7 @@ public class Rating {
     @JsonBackReference
     private User user;
 
-    public Rating(RatingDto ratingDto){
+    public Rating(RatingDto ratingDto) {
         this.id = ratingDto.getId();
         this.rating = ratingDto.getRating();
         this.movie = new Movie(ratingDto.getMovie());

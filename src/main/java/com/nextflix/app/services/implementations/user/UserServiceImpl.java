@@ -26,74 +26,108 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(UserDto userDto) throws Exception {
-        User user = userRepository.findByEmail(userDto.getEmail());
-        if (user != null) {
-            throw new Exception("User already exists with this email.");
+
+        try {
+            User user = userRepository.findByEmail(userDto.getEmail());
+            if (user != null) {
+                throw new Exception("User already exists with this email.");
+            }
+
+            User newUser = new User();
+
+            newUser.setEmail(userDto.getEmail());
+            newUser.setPassword("{bcrypt}" + passwordEncoder.encode(userDto.getPassword()));
+            newUser.setFirstName(userDto.getFirstName());
+            newUser.setLastName(userDto.getLastName());
+            newUser.setRole(UserRole.USER);
+
+            return userRepository.save(newUser);
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
         }
-
-        User newUser = new User();
-
-        newUser.setEmail(userDto.getEmail());
-        newUser.setPassword("{bcrypt}" + passwordEncoder.encode(userDto.getPassword()));
-        newUser.setFirstName(userDto.getFirstName());
-        newUser.setLastName(userDto.getLastName());
-        newUser.setRole(UserRole.USER);
-
-        return userRepository.save(newUser);
     }
 
     @Override
     public UserDto getUserByEmail(String email) {
-        UserDto userDto = new UserDto(userRepository.findByEmail(email));
 
-        return userDto;
+        try {
+            UserDto userDto = new UserDto(userRepository.findByEmail(email));
+
+            return userDto;
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public UserDto getUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
 
-        return new UserDto(user);
+        try {
+            Optional<User> user = userRepository.findById(id);
+
+            return new UserDto(user);
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public List<UserAdminResponseDto> getAllUsers() {
-        List<User> users = userRepository.findAllUsers();
 
-        return users.stream().map((user) -> new UserAdminResponseDto(user)).collect(Collectors.toList());
+        try {
+            List<User> users = userRepository.findAllUsers();
+
+            return users.stream().map((user) -> new UserAdminResponseDto(user)).collect(Collectors.toList());
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public User updateUser(UserDto userDto) {
 
-        User user = userRepository.findByEmail(userDto.getEmail());
-       
-        user.setFirstName(userDto.getFirstName() != null ? userDto.getFirstName() : user.getFirstName());
-        user.setLastName(userDto.getLastName() != null ? userDto.getLastName() : user.getLastName());
-        user.setEmail(userDto.getEmail() != null ? userDto.getEmail() : user.getEmail());
-        user.setPassword(user.getPassword());
-        user.setStripeCustomerId(user.getStripeCustomerId());
-        user.setStripePaymentMethodId(user.getStripePaymentMethodId());
-        
-        UserRole role = userDto.getRole();
-        if (role == UserRole.ADMIN || role == UserRole.USER)
-            user.setRole(role);
-       
+        try {
+            User user = userRepository.findByEmail(userDto.getEmail());
 
-        return userRepository.saveAndFlush(user);
+            user.setFirstName(userDto.getFirstName() != null ? userDto.getFirstName() : user.getFirstName());
+            user.setLastName(userDto.getLastName() != null ? userDto.getLastName() : user.getLastName());
+            user.setEmail(userDto.getEmail() != null ? userDto.getEmail() : user.getEmail());
+            user.setPassword(user.getPassword());
+            user.setStripeCustomerId(user.getStripeCustomerId());
+            user.setStripePaymentMethodId(user.getStripePaymentMethodId());
+
+            UserRole role = userDto.getRole();
+            if (role == UserRole.ADMIN || role == UserRole.USER)
+                user.setRole(role);
+
+            return userRepository.saveAndFlush(user);
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
-    public boolean deleteUser(UserDto user){
-        try{
-         userRepository.delete(new User(getUserByEmail(user.getEmail())));
-        }
-        catch(Exception e){
-            System.out.println(e.getMessage());
+    public boolean deleteUser(UserDto user) {
+
+        try {
+            userRepository.delete(new User(getUserByEmail(user.getEmail())));
+
+            return true;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
             return false;
         }
 
-        return true;
     }
 
 }

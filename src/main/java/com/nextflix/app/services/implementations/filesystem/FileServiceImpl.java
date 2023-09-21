@@ -16,13 +16,22 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public byte[] getFile(String file) throws IOException {
+
+        try {
         Path filePath = Paths.get(file);
 
         return Files.readAllBytes(filePath);
+        }
+        catch (Exception e){
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public void saveFile(MultipartFile file, String path) throws IOException {
+
+        try {
         Path uploadPath = Paths.get(path);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
@@ -30,6 +39,11 @@ public class FileServiceImpl implements FileService {
 
         Path filePath = Paths.get(path, file.getOriginalFilename());
         Files.write(filePath, file.getBytes());
+        
+        }
+        catch(Exception e){
+            System.err.println(e.getMessage());
+        }
     }
 
 }

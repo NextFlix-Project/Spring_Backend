@@ -16,17 +16,38 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public SubscriptionProduct createProduct(SubscriptionProductDto productDto) {
+
+        try{
         return productRepository.save(new SubscriptionProduct(productDto));
+        }
+        catch(Exception e){
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public SubscriptionProductDto getProduct() {
+
+        try{
         return new SubscriptionProductDto(productRepository.findFirstByOrderById());
+        }
+        catch(Exception e){
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public SubscriptionProductDto updateProduct(SubscriptionProductDto product) {
+
+        try{
         return new SubscriptionProductDto(productRepository.saveAndFlush(new SubscriptionProduct(product)));
+        }
+        catch(Exception e){
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
     
 }

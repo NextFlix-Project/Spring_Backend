@@ -22,10 +22,10 @@ public class SubscriptionAdminController {
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody SubscriptionProductDto productDto) {
 
-        try{
-            stripeService.createNewSubscription(productDto.getPrice(), productDto.getName(), productDto.getDescription());
-        }
-        catch (Exception e){
+        try {
+            stripeService.createNewSubscription(productDto.getPrice(), productDto.getName(),
+                    productDto.getDescription());
+        } catch (Exception e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
 
@@ -35,8 +35,6 @@ public class SubscriptionAdminController {
     @PutMapping("/update")
     public ResponseEntity<?> update(@RequestBody SubscriptionDto subscriptionDto) {
 
-  
         return ResponseEntity.status(400).build();
-
     }
 }

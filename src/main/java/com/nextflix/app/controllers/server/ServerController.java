@@ -24,28 +24,36 @@ public class ServerController {
 
     @PostMapping("/internal/registerserver")
     public ResponseEntity<?> addServer(@RequestBody ServerDto server, HttpServletRequest request) {
+
+        try{
         String ipAddr = request.getRemoteAddr();
- 
+
         ServerDto foundServer = serverService.getServerByUrlAndPort(ipAddr, server.getPort());
 
         if (foundServer.getPort() != null || foundServer.getUrl() != null)
             return ResponseEntity.status(409).build();
+
         server.setUrl(ipAddr);
 
         serverService.addServer(server);
         return ResponseEntity.status(200).build();
-
+        }
+        catch(Exception e){
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(500).build();
+        }
     }
 
     @GetMapping("/getallservers")
     public ResponseEntity<?> getAllServers() {
+
         try {
             List<ServerDto> servers = serverService.getAllServers();
 
             return ResponseEntity.status(200).body(servers);
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
 
         return ResponseEntity.status(404).build();

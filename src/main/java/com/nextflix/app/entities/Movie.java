@@ -36,23 +36,27 @@ public class Movie {
     @Column
     private String boxArtUrl;
 
-    @Column 
+    @Column
     private Boolean active;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp releaseDate; 
+    private Timestamp releaseDate;
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Rating> ratings = new ArrayList<>();
 
-    public Movie(MovieDto movie){
+    @OneToMany(mappedBy = "movie")
+    @JsonManagedReference
+    private List<WatchList> watchList = new ArrayList<>();
+
+    public Movie(MovieDto movie) {
         this.id = movie.getId();
         this.title = movie.getTitle();
         this.description = movie.getDescription();
         this.url = movie.getUrl();
     }
 
-    public Movie(MovieAdminDto movie){
+    public Movie(MovieAdminDto movie) {
         this.id = movie.getId();
         this.title = movie.getTitle();
         this.description = movie.getDescription();
@@ -62,7 +66,7 @@ public class Movie {
         this.releaseDate = movie.getReleaseDate();
     }
 
-       public Movie(MovieAddDto movie){
+    public Movie(MovieAddDto movie) {
         this.id = movie.getId();
         this.title = movie.getTitle();
         this.description = movie.getDescription();
@@ -72,4 +76,3 @@ public class Movie {
         this.releaseDate = movie.getReleaseDate();
     }
 }
-  

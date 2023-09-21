@@ -37,6 +37,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
 		return http
 				.cors(Customizer.withDefaults())
 				.csrf(csrf -> csrf.disable())
@@ -65,6 +66,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 	@Bean
 	public AuthenticationManager authenticationManager() {
+
 		return new ProviderManager(
 				Collections.singletonList(
 						new DaoAuthenticationProvider() {

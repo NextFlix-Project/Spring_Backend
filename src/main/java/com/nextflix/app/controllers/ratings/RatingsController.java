@@ -45,8 +45,7 @@ public class RatingsController {
                 ratingDto.setMovie(movieService.findById(rating.getMovieId()));
                 ratingDto.setUser(new UserResponseDto(user));
                 ratingDto.setRating(rating.getRating());
-            }
-            else{
+            } else {
                 ratingDto.setRating(rating.getRating());
             }
 
