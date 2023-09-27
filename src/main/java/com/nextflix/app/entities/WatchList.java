@@ -26,6 +26,7 @@ public class WatchList {
 
     @OneToOne
     @JoinColumn(name = "movie_id")
+    @JsonBackReference
     private Movie movie;
 
     @Column(columnDefinition = "TIMESTAMP")
