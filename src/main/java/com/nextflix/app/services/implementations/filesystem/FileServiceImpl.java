@@ -23,7 +23,7 @@ public class FileServiceImpl implements FileService {
         return Files.readAllBytes(filePath);
         }
         catch (Exception e){
-            System.err.println(e.getMessage());
+            System.err.println("Error finding file: " + e.getMessage());
             return null;
         }
     }
