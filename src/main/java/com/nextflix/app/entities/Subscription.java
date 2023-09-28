@@ -39,7 +39,7 @@ public class Subscription {
     private String stripeId;
 
     @OneToOne()
-    @JsonBackReference
+    @JsonBackReference(value="user-subscription")
     @JoinColumn(name = "user_id")
     private User user;
 

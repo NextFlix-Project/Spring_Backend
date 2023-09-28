@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nextflix.app.dtos.payment.CreditCardDto;
 import com.nextflix.app.dtos.payment.CustomerAndPaymentDto;
 import com.nextflix.app.dtos.payment.CustomerDto;
+import com.nextflix.app.dtos.user.UserAdminDashDto;
 import com.nextflix.app.dtos.user.UserDto;
 import com.nextflix.app.services.interfaces.external.stripe.StripeService;
 import com.nextflix.app.services.interfaces.user.UserService;
@@ -40,7 +41,7 @@ public class CustomerController {
             PaymentMethod paymentMethod = stripeService.createPayment(paymentDto);
             UserDto userDto = userService.getUserByEmail(principal.getName());
             userDto.setStripePaymentMethodId(paymentMethod.getId());
-            userService.updateUser(userDto);
+            userService.updateUser(new UserAdminDashDto(userDto));
 
             return ResponseEntity.ok().build();
 
@@ -66,7 +67,7 @@ public class CustomerController {
             CustomerAndPaymentDto customerAndPaymentDto = stripeService.createCustomer(customerDto);
 
             userDto.setStripeCustomerId(customerAndPaymentDto.getCustomer().getId());
-            userService.updateUser(userDto);
+            userService.updateUser(new UserAdminDashDto(userDto));
 
             return ResponseEntity.ok().body(userDto);
 

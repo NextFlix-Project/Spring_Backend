@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nextflix.app.dtos.user.UserAdminDashDto;
 import com.nextflix.app.dtos.user.UserAdminResponseDto;
 import com.nextflix.app.dtos.user.UserDto;
 import com.nextflix.app.enums.UserRole;
@@ -27,7 +28,7 @@ public class UserAdminController {
     private UserService userService;
 
     @PutMapping("/updaterole")
-    public ResponseEntity<?> updateUserRole(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> updateUserRole(@RequestBody UserAdminDashDto userDto) {
 
         if (userDto.getRole() != UserRole.ADMIN && userDto.getRole() != UserRole.USER)
             return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
@@ -36,7 +37,7 @@ public class UserAdminController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String email = authentication.getName();
 
-            UserDto updateUserDto = userService.getUserByEmail(email);
+            UserAdminDashDto updateUserDto = new UserAdminDashDto(userService.getUserByEmail(email));
             updateUserDto.setRole(userDto.getRole());
             userService.updateUser(updateUserDto);
 
@@ -47,7 +48,7 @@ public class UserAdminController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> updateUser(@RequestBody UserAdminDashDto userDto) {
 
         try {
 
@@ -55,7 +56,7 @@ public class UserAdminController {
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.status(3000).build();
+            return ResponseEntity.status(300).build();
         }
     }
 
@@ -73,7 +74,7 @@ public class UserAdminController {
     }
 
     @PostMapping("/deleteuser")
-    public ResponseEntity<?> deleteUser(@RequestBody UserDto user) {
+    public ResponseEntity<?> deleteUser(@RequestBody UserAdminDashDto user) {
 
         try {
             userService.deleteUser(user);

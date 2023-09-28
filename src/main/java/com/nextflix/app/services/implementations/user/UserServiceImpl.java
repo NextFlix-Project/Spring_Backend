@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.nextflix.app.dtos.user.UserAdminDashDto;
 import com.nextflix.app.dtos.user.UserAdminResponseDto;
 import com.nextflix.app.dtos.user.UserDto;
 import com.nextflix.app.entities.User;
@@ -92,7 +93,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(UserDto userDto) {
+    public User updateUser(UserAdminDashDto userDto) {
 
         try {
             User user = userRepository.findByEmail(userDto.getEmail());
@@ -117,7 +118,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteUser(UserDto user) {
+    public boolean deleteUser(UserAdminDashDto user) {
 
         try {
             userRepository.delete(new User(getUserByEmail(user.getEmail())));
